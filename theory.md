@@ -23,17 +23,15 @@ For each topic, read the sections in order:
 
 ## Common notation
 
-- A document is $x = (w_1, \dots, w_T)$.
-- A vocabulary is $V$ with $|V|$ discrete symbols.
-- A token id sequence is $(i_1, \dots, i_T)$, where $i_t \in \{1, \dots, |V|\}$.
-- A model with parameters $\theta$ defines a distribution $p_\theta$ or a score $f_\theta$.
-- Training usually minimizes empirical risk
+A document is $x = (w_1, \dots, w_T)$, a vocabulary is $V$ with $|V|$ discrete symbols, and a token-id sequence is $(i_1, \dots, i_T)$, where $i_t \in \{1, \dots, |V|\}$. A model with parameters $\theta$ defines either a distribution $p_\theta$ or a score $f_\theta$.
+
+Training usually minimizes empirical risk:
 
 $$
 \mathcal{L}(\theta) = \frac{1}{N} \sum_{n=1}^N \ell\big(f_\theta(x^{(n)}), y^{(n)}\big).
 $$
 
-- For language modeling, perplexity is
+For language modeling, perplexity is:
 
 $$
 \operatorname{PPL} = \exp\left(-\frac{1}{T} \sum_{t=1}^T \log p_\theta(w_t \mid w_{<t})\right).
@@ -51,27 +49,25 @@ An analogy: imagine trying to study traffic flow from satellite imagery. Before 
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- Let $\Sigma$ be the character alphabet. A tokenizer is a mapping $\tau : \Sigma^* \to V^*$.
-- A preprocessing pipeline is a composition of transformations
+Let $\Sigma$ be the character alphabet. A tokenizer is a mapping $\tau : \Sigma^* \to V^*$. A preprocessing pipeline is a composition of transformations:
 
 $$
 \tilde{x} = (\phi_m \circ \cdots \circ \phi_1)(x),
 $$
 
-  where $\phi_k$ may lowercase, normalize punctuation, or collapse whitespace.
-- After tokenization, the empirical unigram distribution is
+where $\phi_k$ may lowercase, normalize punctuation, or collapse whitespace. After tokenization, the empirical unigram distribution is
 
 $$
 \hat{p}(w) = \frac{c(w)}{\sum_{v \in V} c(v)}.
 $$
 
-- Vocabulary truncation induces an out-of-vocabulary rate
+Vocabulary truncation induces an out-of-vocabulary rate:
 
 $$
 \operatorname{OOV}(V_K) = \frac{\sum_{w \notin V_K} c(w)}{\sum_{w} c(w)}.
 $$
 
-- Subword tokenization can be seen as an optimization problem trading compression against vocabulary size. In BPE-style methods, merges are chosen greedily to reduce corpus encoding length.
+Subword tokenization can be seen as an optimization problem trading compression against vocabulary size. In BPE-style methods, merges are chosen greedily to reduce corpus encoding length.
 
 ### 3. ARCHITECTURE
 
@@ -172,20 +168,19 @@ The analogy is a grocery receipt. The order of purchased items is gone, but the 
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- For document $d$, define the count vector $x_d \in \mathbb{R}^{|V|}$ with
+For document $d$, define the count vector $x_d \in \mathbb{R}^{|V|}$ by
 
 $$
 (x_d)_j = c(v_j, d).
 $$
 
-- A binary BoW model uses $\mathbb{1}[c(v_j,d) > 0]$ instead.
-- For classification with $C$ labels, softmax regression models
+A binary BoW model uses $\mathbb{1}[c(v_j,d) > 0]$ instead. For classification with $C$ labels, softmax regression models
 
 $$
 p_\theta(y=c \mid x) = \frac{\exp(w_c^\top x + b_c)}{\sum_{c'=1}^C \exp(w_{c'}^\top x + b_{c'})}.
 $$
 
-- The training objective is cross-entropy with optional $L_2$ regularization:
+The training objective is cross-entropy with optional $L_2$ regularization:
 
 $$
 \mathcal{L}(W,b) = -\frac{1}{N}\sum_{n=1}^N \log p_\theta(y^{(n)} \mid x^{(n)}) + \frac{\lambda}{2}\|W\|_F^2.
@@ -275,25 +270,25 @@ Bag of Words treats every token equally. TF-IDF corrects that by down-weighting 
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- Term frequency:
+Term frequency is
 
 $$
 \operatorname{tf}(t,d) = \frac{c(t,d)}{\sum_{t'} c(t',d)}.
 $$
 
-- Document frequency:
+Document frequency is
 
 $$
 \operatorname{df}(t) = \sum_{d} \mathbb{1}[t \in d].
 $$
 
-- Inverse document frequency with smoothing:
+Inverse document frequency with smoothing is
 
 $$
-\operatorname{idf}(t) = \log\frac{1 + N}{1 + \operatorname{df}(t)} + 1.
+\operatorname{idf}(t) = \log \frac{1 + N}{1 + \operatorname{df}(t)} + 1.
 $$
 
-- TF-IDF feature:
+The TF-IDF feature is
 
 $$
 x_{t,d} = \operatorname{tf}(t,d)\operatorname{idf}(t).
@@ -375,22 +370,19 @@ Skip-gram predicts context words from a center word. CBOW predicts the center wo
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- For skip-gram with center word $w_t$ and context word $w_o$, the full softmax objective is
+For skip-gram with center word $w_t$ and context word $w_o$, the full softmax objective is
 
 $$
 \log p(w_o \mid w_t) = \log \frac{\exp(u_{w_o}^\top v_{w_t})}{\sum_{w \in V} \exp(u_w^\top v_{w_t})}.
 $$
 
-- The corpus loss sums this over all context windows.
-- Negative sampling replaces the expensive softmax with
+The corpus loss sums this over all context windows. Negative sampling replaces the expensive softmax with
 
 $$
 \ell = -\log \sigma(u_o^\top v_c) - \sum_{k=1}^K \log \sigma(-u_{n_k}^\top v_c).
 $$
 
-- CBOW averages or sums context embeddings before predicting the center word.
-
-The gradients update two embedding tables: input vectors $v_w$ and output vectors $u_w$.
+CBOW averages or sums context embeddings before predicting the center word. The gradients update two embedding tables: input vectors $v_w$ and output vectors $u_w$.
 
 ### 3. ARCHITECTURE
 
@@ -474,14 +466,13 @@ Word2Vec learns from predictive local windows. GloVe starts from the global co-o
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- Let $X_{ij}$ be the weighted co-occurrence count between word $i$ and context word $j$.
-- GloVe fits vectors $w_i, \tilde{w}_j$ and biases $b_i, \tilde{b}_j$ via
+Let $X_{ij}$ be the weighted co-occurrence count between word $i$ and context word $j$. GloVe fits vectors $w_i, \tilde{w}_j$ and biases $b_i, \tilde{b}_j$ via
 
 $$
 J = \sum_{i,j} f(X_{ij})\big(w_i^\top \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij}\big)^2.
 $$
 
-- The weighting function is typically
+The weighting function is typically
 
 $$
 f(x) = \begin{cases}
@@ -564,25 +555,25 @@ You can think of it as a lookup table of short-range habits of a language.
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- Chain rule:
+By the chain rule,
 
 $$
 p(w_{1:T}) = \prod_{t=1}^T p(w_t \mid w_{<t}).
 $$
 
-- Markov approximation:
+Under the Markov approximation,
 
 $$
 p(w_t \mid w_{<t}) \approx p(w_t \mid w_{t-n+1:t-1}).
 $$
 
-- Maximum-likelihood estimate:
+the maximum-likelihood estimate is
 
 $$
 \hat{p}(w \mid h) = \frac{c(h,w)}{c(h)}.
 $$
 
-- Additive smoothing:
+With additive smoothing,
 
 $$
 \hat{p}_\alpha(w \mid h) = \frac{c(h,w)+\alpha}{c(h)+\alpha |V|}.
@@ -661,17 +652,13 @@ In an HMM tagger, the POS tags are hidden states and words are emissions. The mo
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- Joint factorization for tags $z_{1:T}$ and words $x_{1:T}$:
+For tags $z_{1:T}$ and words $x_{1:T}$, the joint factorization is
 
 $$
 p(x_{1:T}, z_{1:T}) = p(z_1) p(x_1 \mid z_1) \prod_{t=2}^T p(z_t \mid z_{t-1}) p(x_t \mid z_t).
 $$
 
-- Parameters:
-  - start probabilities $p(z_1)$,
-  - transition probabilities $p(z_t \mid z_{t-1})$,
-  - emission probabilities $p(x_t \mid z_t)$.
-- Decoding seeks
+The model uses start probabilities $p(z_1)$, transition probabilities $p(z_t \mid z_{t-1})$, and emission probabilities $p(x_t \mid z_t)$. Decoding seeks
 
 $$
 z_{1:T}^* = \arg\max_{z_{1:T}} p(z_{1:T} \mid x_{1:T}).
@@ -759,20 +746,19 @@ The promise is generalization: two different prefixes can map to nearby hidden s
 
 ### 2. MATHEMATICAL FOUNDATIONS
 
-- Hidden recurrence:
+The hidden recurrence is
 
 $$
 h_t = \tanh(W_{xh} x_t + W_{hh} h_{t-1} + b_h).
 $$
 
-- Output logits for classification:
+For classification, output logits are
 
 $$
 o = W_{hy} h_T + b_y.
 $$
 
-- Softmax defines label probabilities.
-- Training uses backpropagation through time (BPTT), where gradients flow through all previous hidden states.
+Softmax defines label probabilities. Training uses backpropagation through time (BPTT), where gradients flow through all previous hidden states.
 
 Vanishing and exploding gradients arise because repeated Jacobian multiplication either shrinks or amplifies signals across time.
 
