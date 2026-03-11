@@ -1,0 +1,7 @@
+[
+  {"tokens": ["the", "dog", "runs"], "tags": ["DET", "NOUN", "VERB"]},
+  {"tokens": ["a", "cat", "sleeps"], "tags": ["DET", "NOUN", "VERB"]},
+  {"tokens": ["the", "blue", "bird", "sings"], "tags": ["DET", "ADJ", "NOUN", "VERB"]},
+  {"tokens": ["small", "models", "learn"], "tags": ["ADJ", "NOUN", "VERB"]},
+  {"tokens": ["the", "student", "reads"], "tags": ["DET", "NOUN", "VERB"]}
+]

@@ -1,0 +1,7 @@
+[
+  {"source": "i like nlp", "target": "j aime nlp"},
+  {"source": "you like math", "target": "tu aimes les maths"},
+  {"source": "we study transformers", "target": "nous etudions les transformeurs"},
+  {"source": "models learn patterns", "target": "les modeles apprennent des motifs"},
+  {"source": "attention helps alignment", "target": "l attention aide l alignement"}
+]

@@ -1,0 +1,6 @@
+natural language processing studies how machines represent and generate text
+language models estimate the probability of token sequences
+transformers use self attention to mix contextual information
+bert learns bidirectional representations with masked language modeling
+gpt predicts the next token autoregressively from left to right
+research in nlp blends mathematics optimization and careful experimentation
